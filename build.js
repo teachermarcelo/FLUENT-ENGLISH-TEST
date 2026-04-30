@@ -1,32 +1,33 @@
 const fs = require('fs');
 const path = require('path');
 
+console.log('🚀 Iniciando build...');
 const SRC = path.join(__dirname, 'src');
 const DIST = path.join(__dirname, 'docs');
+const quizzesDir = path.join(SRC, 'content', 'quizzes');
 
-// 1. Valida estrutura
-const required = [
-  path.join(SRC, 'content', 'quizzes'),
-  path.join(SRC, 'templates', 'layout.html'),
-  path.join(SRC, 'assets')
-];
-
-for (const p of required) {
-  if (!fs.existsSync(p)) {
-    console.error(`❌ Falta: ${p}`);
-    console.log('💡 Crie as pastas e arquivos conforme instruções e rode novamente.');
-    process.exit(1);
-  }
+// 1. Verifica pasta de quizzes
+if (!fs.existsSync(quizzesDir)) {
+  console.error('❌ ERRO: Pasta src/content/quizzes não existe!');
+  process.exit(1);
 }
 
-// 2. Prepara output
+// 2. Lista arquivos JSON
+const files = fs.readdirSync(quizzesDir).filter(f => f.endsWith('.json'));
+console.log(`📂 Arquivos JSON encontrados: ${files.length}`);
+
+if (files.length === 0) {
+  console.warn('⚠️ Nenhum arquivo .json encontrado. Adicione um em src/content/quizzes/ e rode novamente.');
+  process.exit(0);
+}
+
+// 3. Prepara pasta de saída
 if (!fs.existsSync(DIST)) fs.mkdirSync(DIST, { recursive: true });
 fs.cpSync(path.join(SRC, 'assets'), path.join(DIST, 'assets'), { recursive: true });
+console.log('📦 Assets copiados para /docs');
 
+// 4. Gera quizzes
 const layout = fs.readFileSync(path.join(SRC, 'templates', 'layout.html'), 'utf-8');
-const quizzesDir = path.join(SRC, 'content', 'quizzes');
-const files = fs.readdirSync(quizzesDir).filter(f => f.endsWith('.json'));
-
 let homeLinks = '';
 
 files.forEach(file => {
@@ -34,7 +35,6 @@ files.forEach(file => {
     const raw = fs.readFileSync(path.join(quizzesDir, file), 'utf-8');
     const quiz = JSON.parse(raw);
     
-    // Monta questões HTML
     const questionsHtml = quiz.questions.map((q, i) => `
       <div class="question-block" data-index="${i}">
         <p class="q-text">${q.text}</p>
@@ -59,17 +59,17 @@ files.forEach(file => {
     homeLinks += `<li><a href="/${quiz.id}.html">${quiz.title} <span class="level-badge">${quiz.level}</span></a></li>\n`;
     console.log(`✅ Gerado: ${quiz.id}.html`);
   } catch (e) {
-    console.error(`❌ Erro no arquivo ${file}: ${e.message}`);
+    console.error(`❌ Erro ao processar ${file}:`, e.message);
   }
 });
 
-// 3. Gera index.html
+// 5. Gera index.html
 const index = `<!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FLUENT ENGLISH TEST</title><link rel="stylesheet" href="/assets/css/style.css"></head>
 <body><header class="site-header"><div class="logo">FLUENT ENGLISH TEST</div></header>
 <main class="quiz-container"><h1>Testes Disponíveis</h1><ul style="list-style:none;padding:0;">${homeLinks}</ul>
-<p style="color:#64748b;margin-top:2rem;">Adicione novos quizzes em <code>src/content/quizzes/</code> e rode <code>npm run build</code></p></main></body></html>`;
+<p style="color:#64748b;margin-top:2rem;">Adicione novos quizzes em <code>src/content/quizzes/</code> e rode <code>node build.js</code></p></main></body></html>`;
 
 fs.writeFileSync(path.join(DIST, 'index.html'), index);
-console.log(`\n🚀 Build concluído! ${files.length} quiz(s) pronto(s) na pasta /docs`);
+console.log(`🎉 Build concluído! ${files.length} quiz(s) gerado(s) em /docs`);
