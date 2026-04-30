@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLUENT ENGLISH TEST | {{title}}</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">FLUENT ENGLISH TEST</div>
+    <nav><a href="/">Home</a> | <span class="level-badge">{{level}}</span></nav>
+  </header>
+
+  <main class="quiz-container">
+    <h1>{{title}}</h1>
+    <div id="quiz-area">
+      <!-- QUESTÕES INJETADAS PELO BUILD -->
+      <div class="question-block" data-index="0">
+        <p class="q-text">{{question.text}}</p>
+        <div class="options">
+          {{#options}}
+          <label class="opt-btn"><input type="radio" name="q{{index}}" value="{{value}}"> {{text}}</label>
+          {{/options}}
+        </div>
+        <div class="feedback-box" style="display:none;">
+          <p class="msg"></p>
+          <div class="tip-box">{{tip}}</div>
+          <button class="next-btn">Próxima →</button>
+        </div>
+      </div>
+    </div>
+    <div id="final-review" style="display:none;"></div>
+  </main>
+
+  <script>
+    window.QUIZ_DATA = {{quizJson}};
+  </script>
+  <script src="/assets/js/quiz-engine.js"></script>
+</body>
+</html>
