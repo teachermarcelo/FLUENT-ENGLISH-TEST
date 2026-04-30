@@ -8,21 +8,15 @@
       "text": "She ___ to work by bus every day.",
       "options": ["goes", "is going", "go", "going"],
       "correct": 0,
-      "feedback": {
-        "correct": "✅ Correto! Usamos Present Simple para rotinas e hábitos.",
-        "incorrect": "❌ Tente novamente. Lembre-se: 'every day' indica rotina → Present Simple."
-      },
-      "tip": "💡 Dica: Verbos de rotina (always, usually, every day) levam Present Simple. Ações no exato momento usam Present Continuous (am/is/are + verb-ing)."
+      "feedback": { "correct": "✅ Correto! Rotinas usam Present Simple.", "incorrect": "❌ Atenção: 'every day' indica hábito." },
+      "tip": "💡 Dica: Rotinas (always, usually, every day) → Present Simple. Ações no exato momento → am/is/are + verb-ing."
     },
     {
       "text": "Look! The children ___ in the park.",
       "options": ["play", "plays", "are playing", "played"],
       "correct": 2,
-      "feedback": {
-        "correct": "✅ Exato! 'Look!' indica ação acontecendo agora → Present Continuous.",
-        "incorrect": "❌ Atenção à pista temporal. 'Look!' ou 'Listen!' pedem Present Continuous."
-      },
-      "tip": "💡 Dica: Palavras como now, at the moment, look!, listen! exigem am/is/are + verb-ing."
+      "feedback": { "correct": "✅ Exato! 'Look!' indica ação agora.", "incorrect": "❌ 'Look!' ou 'Listen!' exigem Present Continuous." },
+      "tip": "💡 Dica: Palavras como now, at the moment, look!, listen! pedem am/is/are + verb-ing."
     }
   ]
 }
